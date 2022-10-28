@@ -1,11 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Cursor } from "../types";
 
 const cursorSlice = createSlice({
   name: "cursor",
   initialState: {},
-  reducers: {},
+  reducers: {
+    setCursor(state, action: PayloadAction<Cursor>) {},
+  },
 });
 
-export const {} = cursorSlice.actions;
+export const { setCursor } = cursorSlice.actions;
 
 export default cursorSlice.reducer;

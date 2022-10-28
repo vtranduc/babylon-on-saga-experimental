@@ -1,4 +1,5 @@
 import { Mesh, Scene } from "babylonjs";
+import { CursorCallbacks, SetCursorStyle } from "../../types";
 
 export default abstract class CursorManager {
   protected abstract mesh: Mesh;
@@ -11,7 +12,7 @@ export default abstract class CursorManager {
     this.scene = scene;
   }
 
-  get position() {
-    return this.mesh.position;
-  }
+  public abstract get getCursorCallbacks(): (
+    setCursorStyle: SetCursorStyle
+  ) => Partial<CursorCallbacks>;
 }

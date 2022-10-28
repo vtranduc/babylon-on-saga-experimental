@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import cursorReducer from "./cursorReducer";
+import cursorReducer, { setCursor } from "./cursorReducer";
 import sceneReducer from "./sceneReducer";
 
 export default combineReducers({
@@ -7,4 +7,4 @@ export default combineReducers({
   scene: sceneReducer,
 });
 
-export {};
+export { setCursor };

@@ -5,9 +5,8 @@ import { MeshCursor } from "../types";
 export default function cursorSaga(sceneManager: SceneManager) {
   const manager = new NormalTracerManager(
     MeshCursor.NormalTracer,
-    sceneManager.renderScene,
-    { sphereDiameter: 1 }
+    sceneManager.renderScene
   );
 
-  manager.position.y = 2;
+  sceneManager.loadCursorCallbacks(manager.getCursorCallbacks);
 }
