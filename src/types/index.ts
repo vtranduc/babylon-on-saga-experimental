@@ -4,7 +4,8 @@ export enum ElementId {
   RenderCanvas = "render-canvas",
 }
 export enum Shader {
-  SolidFresnel = "SolidFresnel",
+  SolidFresnel = "solidFresnel",
+  InfiniteGrid = "infiniteGrid",
 }
 
 export enum MeshCursor {

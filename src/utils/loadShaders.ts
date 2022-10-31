@@ -4,6 +4,9 @@ import { Shader } from "../types";
 import solidFresnelVertexMedia from "../glsl/solidFresnel/vertexShader.glsl";
 import solidFresnelFragmentMedia from "../glsl/solidFresnel/fragmentShader.glsl";
 
+import infiniteGridVertexMedia from "../glsl/infiniteGrid/vertexShader.glsl";
+import infiniteGridFragmentMedia from "../glsl/infiniteGrid/fragmentShader.glsl";
+
 interface GlslMedia {
   vertex: string;
   fragment: string;
@@ -15,6 +18,10 @@ const media: ShaderMedia = {
   [Shader.SolidFresnel]: {
     vertex: solidFresnelVertexMedia,
     fragment: solidFresnelFragmentMedia,
+  },
+  [Shader.InfiniteGrid]: {
+    vertex: infiniteGridVertexMedia,
+    fragment: infiniteGridFragmentMedia,
   },
 };
 

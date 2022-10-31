@@ -3,16 +3,16 @@ import {
   Scene,
   ArcRotateCamera,
   DirectionalLight,
-  MeshBuilder,
   Vector3,
   PointerInfo,
   PointerEventTypes,
 } from "babylonjs";
 import { CssCursorStyle, CursorCallbacks, SetCursorStyle } from "../../types";
+import { InfiniteGrid } from "../gridManagers";
 
 export default class SceneManager {
   private canvas = document.createElement("canvas");
-  private engine = new Engine(this.canvas);
+  private engine = new Engine(this.canvas, true);
   private scene = new Scene(this.engine);
   private camera = new ArcRotateCamera(
     "Camera",
@@ -31,12 +31,7 @@ export default class SceneManager {
     this.camera.attachControl();
     this.engine.runRenderLoop(() => this.scene.render());
     new DirectionalLight("light", new Vector3(0, -1, 0), this.scene);
-    const ground = MeshBuilder.CreateGround(
-      "ground",
-      { width: 6, height: 6 },
-      this.scene
-    );
-    ground.enablePointerMoveEvents = true;
+    new InfiniteGrid("infiniteGrid", this.scene, this.camera.position);
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
   }
