@@ -1,10 +1,19 @@
 import { combineReducers } from "redux";
-import cursorReducer, { setCursor } from "./cursorReducer";
-import sceneReducer from "./sceneReducer";
+import cursorReducer, {
+  CursorState,
+  setCursor,
+  setNormalTracerProperties,
+} from "./cursorReducer";
+import sceneReducer, { SceneState } from "./sceneReducer";
 
 export default combineReducers({
   cursor: cursorReducer,
   scene: sceneReducer,
 });
 
-export { setCursor };
+export interface RootState {
+  cursor: CursorState;
+  scene: SceneState;
+}
+
+export { setCursor, setNormalTracerProperties };

@@ -8,7 +8,6 @@ export class InfiniteGrid {
       { width: 2, height: 2 },
       scene
     );
-    mesh.enablePointerMoveEvents = true;
     mesh.alwaysSelectAsActiveMesh = true;
     const material = new InfiniteGridMaterialManager(
       `${name}Material`,

@@ -6,6 +6,7 @@ import {
   Vector3,
   PointerInfo,
   PointerEventTypes,
+  MeshBuilder,
 } from "babylonjs";
 import { CssCursorStyle, CursorCallbacks, SetCursorStyle } from "../../types";
 import { InfiniteGrid } from "../gridManagers";
@@ -34,6 +35,28 @@ export default class SceneManager {
     new InfiniteGrid("infiniteGrid", this.scene, this.camera.position);
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
+
+    this.addSomeMeshes();
+  }
+
+  // Adding temporary objects in the scene for test purposes
+
+  private addSomeMeshes() {
+    const capsule = MeshBuilder.CreateCapsule("");
+    capsule.enablePointerMoveEvents = true;
+    capsule.position.set(1, 1, 1);
+
+    const box = MeshBuilder.CreateBox("");
+    box.enablePointerMoveEvents = true;
+    box.position.set(-1, 1, 1);
+
+    const sphere = MeshBuilder.CreateSphere("");
+    sphere.enablePointerMoveEvents = true;
+    sphere.position.set(-1, 1, -1);
+
+    const a = MeshBuilder.CreateIcoSphere("");
+    a.enablePointerMoveEvents = true;
+    a.position.set(1, 1, -1);
   }
 
   // Getters and Setters
@@ -89,11 +112,25 @@ export default class SceneManager {
   }
 
   private get defaultCursorCallbacks(): CursorCallbacks {
-    return { move: () => {} };
+    return {
+      move: () => {},
+      wheel: () => {},
+      dragStart: () => {},
+      dragEnd: () => {},
+    };
   }
 
   private onPointerObservable(pointerInfo: PointerInfo) {
     switch (pointerInfo.type) {
+      case PointerEventTypes.POINTERDOWN:
+        this.onPointerDown(pointerInfo);
+        break;
+      case PointerEventTypes.POINTERUP:
+        this.onPointerUp(pointerInfo);
+        break;
+      case PointerEventTypes.POINTERWHEEL:
+        this.onPointerWheel(pointerInfo);
+        break;
       case PointerEventTypes.POINTERMOVE:
         this.onPointerMove(pointerInfo);
         break;
@@ -101,7 +138,19 @@ export default class SceneManager {
     }
   }
 
+  private onPointerUp(pointerInfo: PointerInfo) {
+    this.cursorCallbacks.dragEnd(pointerInfo, this.camera.position);
+  }
+
+  private onPointerDown(pointerInfo: PointerInfo) {
+    this.cursorCallbacks.dragStart(pointerInfo, this.camera.position);
+  }
+
+  private onPointerWheel(pointerInfo: PointerInfo) {
+    this.cursorCallbacks.wheel(pointerInfo, this.camera.position);
+  }
+
   private onPointerMove(pointerInfo: PointerInfo) {
-    this.cursorCallbacks.move(pointerInfo);
+    this.cursorCallbacks.move(pointerInfo, this.camera.position);
   }
 }

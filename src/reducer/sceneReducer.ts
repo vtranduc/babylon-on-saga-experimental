@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface SceneState {}
+
+const initialState: SceneState = {};
+
 const sceneSlice = createSlice({
   name: "scene",
-  initialState: {},
+  initialState,
   reducers: {},
 });
-
-export const {} = sceneSlice.actions;
 
 export default sceneSlice.reducer;
