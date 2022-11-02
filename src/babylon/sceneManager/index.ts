@@ -7,6 +7,7 @@ import {
   PointerInfo,
   PointerEventTypes,
   MeshBuilder,
+  SceneLoader,
 } from "babylonjs";
 import { CssCursorStyle, CursorCallbacks, SetCursorStyle } from "../../types";
 import { InfiniteGrid } from "../gridManagers";
@@ -17,9 +18,9 @@ export default class SceneManager {
   private scene = new Scene(this.engine);
   private camera = new ArcRotateCamera(
     "Camera",
-    -Math.PI / 2,
+    Math.PI / 2,
     Math.PI / 4,
-    10,
+    20,
     Vector3.Zero(),
     this.scene
   );
@@ -36,6 +37,7 @@ export default class SceneManager {
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
 
+    this.addCat();
     this.addSomeMeshes();
   }
 
@@ -57,6 +59,17 @@ export default class SceneManager {
     const a = MeshBuilder.CreateIcoSphere("");
     a.enablePointerMoveEvents = true;
     a.position.set(1, 1, -1);
+  }
+
+  private addCat() {
+    SceneLoader.ImportMesh(
+      "",
+      "./models/cat-girl-ffxiv/",
+      "scene.gltf",
+      this.scene,
+      (meshes) =>
+        meshes.forEach((mesh, i) => (mesh.enablePointerMoveEvents = true))
+    );
   }
 
   // Getters and Setters

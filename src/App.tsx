@@ -1,4 +1,5 @@
 import { ElementId } from "./types";
+import "babylonjs-loaders";
 
 function App() {
   return (
