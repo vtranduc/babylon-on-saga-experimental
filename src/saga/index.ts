@@ -1,5 +1,6 @@
 import { all } from "redux-saga/effects";
 import cursorSaga from "./cursorSaga";
+import fileSaga from "./fileSaga";
 import { ElementId } from "../types";
 import SceneManager from "../babylon/sceneManager";
 import { loadShaders } from "../utils";
@@ -11,7 +12,7 @@ export default function* saga() {
 
   yield setCanvasToContainer(sceneManager);
 
-  yield all([cursorSaga(sceneManager)]);
+  yield all([cursorSaga(sceneManager), fileSaga(sceneManager)]);
 }
 
 function setCanvasToContainer(sceneManager: SceneManager): Promise<void> {

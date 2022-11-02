@@ -1,4 +1,5 @@
 import { PointerInfo, Vector3 } from "babylonjs";
+import { CSSProperties } from "react";
 
 export enum ElementId {
   RenderCanvas = "render-canvas",
@@ -43,4 +44,31 @@ export interface NormalTracerProperties {
   rimColor: string;
   alpha: number;
   size: number;
+}
+
+export interface ContainerProps {
+  children?: JSX.Element | JSX.Element[] | null;
+  style?: CSSProperties;
+  id?: string;
+}
+
+export enum ImageEXT {
+  JPG = "jpg",
+  PNG = "png",
+  JPEG = "jpeg",
+  WEBP = "webp",
+}
+
+export enum Asset3DEXT {
+  FBX = "fbx",
+  OBJ = "obj",
+  GLB = "glb",
+  GLTF = "gltf",
+}
+
+export type EXT = ImageEXT | Asset3DEXT;
+
+export interface BlobData {
+  blob: string;
+  ext: EXT;
 }

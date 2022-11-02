@@ -8,8 +8,16 @@ import {
   PointerEventTypes,
   MeshBuilder,
   SceneLoader,
+  ISceneLoaderAsyncResult,
+  Nullable,
 } from "babylonjs";
-import { CssCursorStyle, CursorCallbacks, SetCursorStyle } from "../../types";
+import {
+  Asset3DEXT,
+  CssCursorStyle,
+  CursorCallbacks,
+  EXT,
+  SetCursorStyle,
+} from "../../types";
 import { InfiniteGrid } from "../gridManagers";
 
 export default class SceneManager {
@@ -37,7 +45,7 @@ export default class SceneManager {
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
 
-    this.addCat();
+    // this.addCat();
     this.addSomeMeshes();
   }
 
@@ -111,6 +119,27 @@ export default class SceneManager {
   public resetCursor() {
     if (this.container) this.container.style.cursor = CssCursorStyle.Standard;
     this.cursorCallbacks = this.defaultCursorCallbacks;
+  }
+
+  // Load blob
+
+  public async loadBlob(
+    url: string,
+    ext: EXT
+  ): Promise<Nullable<ISceneLoaderAsyncResult>> {
+    switch (ext) {
+      case Asset3DEXT.GLB:
+        return await SceneLoader.ImportMeshAsync(
+          "",
+          url,
+          undefined,
+          this.scene,
+          null,
+          ".glb"
+        );
+      default:
+        return null;
+    }
   }
 
   // Utils
