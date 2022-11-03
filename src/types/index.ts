@@ -53,17 +53,17 @@ export interface ContainerProps {
 }
 
 export enum ImageEXT {
-  JPG = "jpg",
-  PNG = "png",
-  JPEG = "jpeg",
-  WEBP = "webp",
+  JPG = ".jpg",
+  PNG = ".png",
+  JPEG = ".jpeg",
+  WEBP = ".webp",
 }
 
 export enum Asset3DEXT {
-  FBX = "fbx",
-  OBJ = "obj",
-  GLB = "glb",
-  GLTF = "gltf",
+  FBX = ".fbx",
+  OBJ = ".obj",
+  GLB = ".glb",
+  GLTF = ".gltf",
 }
 
 export type EXT = ImageEXT | Asset3DEXT;

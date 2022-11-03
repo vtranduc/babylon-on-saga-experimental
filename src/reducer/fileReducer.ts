@@ -9,10 +9,10 @@ const fileSlice = createSlice({
   name: "file",
   initialState,
   reducers: {
-    loadBlob(state, action: PayloadAction<BlobData>) {},
+    loadAndRevokeBlob(state, action: PayloadAction<BlobData>) {},
   },
 });
 
-export const { loadBlob } = fileSlice.actions;
+export const { loadAndRevokeBlob } = fileSlice.actions;
 
 export default fileSlice.reducer;

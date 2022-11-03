@@ -19,7 +19,7 @@ export default function* cursorSaga(sceneManager: SceneManager) {
     normalTracerManager,
     normalTracerProperties
   );
-  updateNormalTracerState(updates);
+  yield put(updateNormalTracerState(updates));
 
   yield all([
     takeEvery(

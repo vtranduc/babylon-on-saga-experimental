@@ -1,6 +1,6 @@
 import { DragEvent } from "react";
 import { useDispatch } from "react-redux";
-import { loadBlob } from "../../reducer";
+import { loadAndRevokeBlob } from "../../reducer";
 import { Asset3DEXT, ContainerProps } from "../../types";
 import { getEXT } from "../../utils/getEXT";
 
@@ -15,7 +15,7 @@ export function DragAndDrop({ children, style, id }: ContainerProps) {
     const ext = getEXT(file.name);
     if (ext !== Asset3DEXT.GLB) return;
     const blob = window.URL.createObjectURL(file);
-    dispatch(loadBlob({ blob, ext }));
+    dispatch(loadAndRevokeBlob({ blob, ext }));
   }
 
   function preventDefaultAndStopPrograpagation(e: DragAndDropEvent) {
