@@ -8,8 +8,7 @@ import {
   PointerEventTypes,
   MeshBuilder,
   SceneLoader,
-  ISceneLoaderAsyncResult,
-  Nullable,
+  FilesInputStore,
 } from "babylonjs";
 import {
   Asset3DEXT,
@@ -18,6 +17,7 @@ import {
   EXT,
   SetCursorStyle,
 } from "../../types";
+import { getEXT, getPathAndName } from "../../utils";
 import { InfiniteGrid } from "../gridManagers";
 
 export default class SceneManager {
@@ -121,24 +121,28 @@ export default class SceneManager {
     this.cursorCallbacks = this.defaultCursorCallbacks;
   }
 
-  // Load blob
+  // Load all files in the store
 
-  public async loadBlob(
-    url: string,
-    ext: EXT
-  ): Promise<Nullable<ISceneLoaderAsyncResult>> {
-    switch (ext) {
-      case Asset3DEXT.GLB:
-        return await SceneLoader.ImportMeshAsync(
+  public async loadAllFiles() {
+    const pathNameCombined = Object.keys(FilesInputStore.FilesToLoad);
+    for (let i = pathNameCombined.length - 1; i >= 0; i--) {
+      const fullPath = pathNameCombined[i];
+      const ext = getEXT(fullPath);
+      if (!ext || !([Asset3DEXT.GLB, Asset3DEXT.GLTF] as EXT[]).includes(ext))
+        continue;
+      const { path, name } = getPathAndName(fullPath);
+      try {
+        await SceneLoader.ImportMeshAsync(
           "",
-          url,
-          undefined,
+          `file:${path}`,
+          name,
           this.scene,
           null,
-          ".glb"
+          ext
         );
-      default:
-        return null;
+      } catch {
+        throw new Error("Encountered error in loading " + fullPath);
+      }
     }
   }
 

@@ -1,23 +1,27 @@
-import { PayloadAction } from "@reduxjs/toolkit";
-import { all, takeLatest } from "redux-saga/effects";
+import { FilesInputStore } from "babylonjs";
+import { all, put, takeLatest } from "redux-saga/effects";
 import SceneManager from "../babylon/sceneManager";
-import { loadAndRevokeBlob } from "../reducer";
-import { BlobData } from "../types";
+import { clearAllFiles, loadAllFiles } from "../reducer";
 
 export default function* fileSaga(sceneManager: SceneManager) {
   yield all([
-    takeLatest(loadAndRevokeBlob.type, loadAndRevokeBlobSaga(sceneManager)),
+    takeLatest(loadAllFiles.type, loadAllFilesSaga(sceneManager)),
+    takeLatest(clearAllFiles.type, clearAllFilesSaga),
   ]);
 }
 
-function loadAndRevokeBlobSaga(sceneManager: SceneManager) {
-  return function* ({ payload: { blob, ext } }: PayloadAction<BlobData>) {
+function loadAllFilesSaga(sceneManager: SceneManager) {
+  return function* () {
     try {
-      yield sceneManager.loadBlob(blob, ext);
-    } catch (error) {
-      console.warn("Failed to load the asset inside Saga: ", error);
+      yield sceneManager.loadAllFiles();
+    } catch (e) {
+      console.warn("Failed to load file: ", e);
     } finally {
-      window.URL.revokeObjectURL(blob);
+      yield put(clearAllFiles());
     }
   };
+}
+
+function clearAllFilesSaga() {
+  FilesInputStore.FilesToLoad = {};
 }

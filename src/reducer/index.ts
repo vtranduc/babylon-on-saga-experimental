@@ -5,7 +5,11 @@ import cursorReducer, {
   setNormalTracerProperties,
 } from "./cursorReducer";
 import sceneReducer, { SceneState } from "./sceneReducer";
-import fileReducer, { FileState, loadAndRevokeBlob } from "./fileReducer";
+import fileReducer, {
+  FileState,
+  loadAllFiles,
+  clearAllFiles,
+} from "./fileReducer";
 
 export default combineReducers({
   cursor: cursorReducer,
@@ -19,4 +23,4 @@ export interface RootState {
   file: FileState;
 }
 
-export { setCursor, setNormalTracerProperties, loadAndRevokeBlob };
+export { setCursor, setNormalTracerProperties, loadAllFiles, clearAllFiles };

@@ -1,5 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BlobData } from "../types";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface FileState {}
 
@@ -9,10 +8,12 @@ const fileSlice = createSlice({
   name: "file",
   initialState,
   reducers: {
-    loadAndRevokeBlob(state, action: PayloadAction<BlobData>) {},
+    loadAllFiles() {},
+
+    clearAllFiles() {},
   },
 });
 
-export const { loadAndRevokeBlob } = fileSlice.actions;
+export const { loadAllFiles, clearAllFiles } = fileSlice.actions;
 
 export default fileSlice.reducer;
