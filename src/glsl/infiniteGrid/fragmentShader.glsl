@@ -33,10 +33,10 @@ void main() {
         return;
     }
 
-    if (abs(planeCoord.x) <= xzHalfWidth) 
-        { gl_FragColor = vec4(uYAxisColor, 1.0); return; }
-    if (abs(planeCoord.y) <= xzHalfWidth) 
-        { gl_FragColor = vec4(uXAxisColor, 1.0); return; }
+    float xAlpha = smoothstep(xzHalfWidth, 0.0, abs(planeCoord.x));
+    if (xAlpha > 0.0) { gl_FragColor = vec4(uYAxisColor, xAlpha); return; }
+    float yAlpha = smoothstep(xzHalfWidth, 0.0, abs(planeCoord.y));
+    if (yAlpha > 0.0) { gl_FragColor = vec4(uXAxisColor, yAlpha); return; }
     
     float minor = getGrid(planeCoord, uSpacing.x);
     float major = getGrid(planeCoord, uSpacing.y);
