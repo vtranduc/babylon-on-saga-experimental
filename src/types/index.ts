@@ -66,9 +66,8 @@ export enum Asset3DEXT {
   GLTF = ".gltf",
 }
 
-export type EXT = ImageEXT | Asset3DEXT;
-
-export interface BlobData {
-  blob: string;
-  ext: EXT;
+export enum CompressedDirectoryEXT {
+  ZIP = ".zip",
 }
+
+export type EXT = ImageEXT | Asset3DEXT | CompressedDirectoryEXT;

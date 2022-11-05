@@ -1,4 +1,4 @@
-import { ImageEXT, Asset3DEXT, EXT } from "../types";
+import { ImageEXT, Asset3DEXT, EXT, CompressedDirectoryEXT } from "../types";
 
 export function getEXT(name: string): EXT | null {
   const lastDot = name.lastIndexOf(".");
@@ -21,6 +21,8 @@ export function getEXT(name: string): EXT | null {
       return Asset3DEXT.GLB;
     case "gltf":
       return Asset3DEXT.GLTF;
+    case "zip":
+      return CompressedDirectoryEXT.ZIP;
     default:
       return null;
   }
