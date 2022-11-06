@@ -4,7 +4,7 @@ import cursorReducer, {
   setCursor,
   setNormalTracerProperties,
 } from "./cursorReducer";
-import sceneReducer, { SceneState } from "./sceneReducer";
+import sceneReducer, { SceneState, setPreset } from "./sceneReducer";
 import fileReducer, {
   FileState,
   loadAllFiles,
@@ -23,4 +23,10 @@ export interface RootState {
   file: FileState;
 }
 
-export { setCursor, setNormalTracerProperties, loadAllFiles, clearAllFiles };
+export {
+  setCursor,
+  setNormalTracerProperties,
+  loadAllFiles,
+  clearAllFiles,
+  setPreset,
+};
