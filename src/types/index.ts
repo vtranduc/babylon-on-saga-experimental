@@ -71,3 +71,15 @@ export enum CompressedDirectoryEXT {
 }
 
 export type EXT = ImageEXT | Asset3DEXT | CompressedDirectoryEXT;
+
+export enum ScenePreset {
+  PrimitiveObjects = "PrimitiveObjects",
+  Miqote = "Miqote",
+}
+
+export enum Primitive {
+  Box = "Box",
+  Sphere = "Sphere",
+  Capsule = "Capsule",
+  IcoSphere = "IcoSphere",
+}

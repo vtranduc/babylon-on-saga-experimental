@@ -19,6 +19,7 @@ import {
 } from "../../types";
 import { getEXT, getPathAndName } from "../../utils";
 import { InfiniteGrid } from "../gridManagers";
+import { MeshManager } from "../meshManager";
 
 export default class SceneManager {
   private canvas = document.createElement("canvas");
@@ -41,9 +42,11 @@ export default class SceneManager {
     this.camera.attachControl();
     this.engine.runRenderLoop(() => this.scene.render());
     new DirectionalLight("light", new Vector3(0, -1, 0), this.scene);
-    new InfiniteGrid("infiniteGrid", this.scene, this.camera.position);
+    // new InfiniteGrid("infiniteGrid", this.scene, this.camera.position);
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
+
+    new MeshManager(this.scene, this.camera.position);
 
     // this.addCat();
     this.addSomeMeshes();
@@ -52,7 +55,7 @@ export default class SceneManager {
   // Adding temporary objects in the scene for test purposes
 
   private addSomeMeshes() {
-    const capsule = MeshBuilder.CreateCapsule("");
+    const capsule = MeshBuilder.CreateCapsule("asdfasfasf");
     capsule.enablePointerMoveEvents = true;
     capsule.position.set(1, 1, 1);
 
@@ -64,9 +67,21 @@ export default class SceneManager {
     sphere.enablePointerMoveEvents = true;
     sphere.position.set(-1, 1, -1);
 
+    // sphere.geometry = box.geometry
+
     const a = MeshBuilder.CreateIcoSphere("");
     a.enablePointerMoveEvents = true;
     a.position.set(1, 1, -1);
+
+    setTimeout(() => {
+      this.scene.removeMesh(capsule);
+    }, 2000);
+
+    setTimeout(() => {
+      this.scene.addMesh(capsule);
+    }, 3000);
+
+    console.log("show the mesh? ", capsule, this.scene);
   }
 
   private addCat() {
@@ -132,13 +147,35 @@ export default class SceneManager {
         continue;
       const { path, name } = getPathAndName(fullPath);
       try {
-        await SceneLoader.ImportMeshAsync(
+        const abc = await SceneLoader.ImportMeshAsync(
           "",
           `file:${path}`,
           name,
           this.scene,
           null,
           ext
+        );
+
+        const meshes = abc.meshes;
+
+        const timer = setInterval(() => {
+          const mesh = meshes.shift();
+
+          if (!mesh) {
+            console.log("done!");
+            clearInterval(timer);
+            return;
+          }
+
+          console.log("remove this: ", mesh);
+          this.scene.removeMesh(mesh);
+        }, 1000);
+
+        console.log(
+          "show abc ----> ",
+          abc,
+          name,
+          this.scene.getMeshByName("yaminoma!")
         );
       } catch {
         throw new Error("Encountered error in loading " + fullPath);
