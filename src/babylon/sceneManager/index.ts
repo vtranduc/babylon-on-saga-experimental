@@ -12,7 +12,6 @@ import {
   CursorCallbacks,
   ScenePreset,
   SetCursorStyle,
-  UniqueId,
 } from "../../types";
 import { MeshManager } from "../meshManager";
 
@@ -22,7 +21,7 @@ export default class SceneManager {
   private scene = new Scene(this.engine);
   private camera = new ArcRotateCamera(
     "Camera",
-    Math.PI / 2,
+    -Math.PI / 2,
     Math.PI / 4,
     20,
     Vector3.Zero(),
@@ -57,17 +56,11 @@ export default class SceneManager {
 
   // Getters and Setters
 
-  public get renderScene() {
-    return this.scene;
+  public get meshCursors() {
+    return this.meshManager.meshCursors;
   }
 
   // Public methods
-
-  // Set up
-
-  public categorizeMeshAsEssential(id: UniqueId) {
-    this.meshManager.categorizeMeshAsEssential(id);
-  }
 
   // Canvas handlers
 

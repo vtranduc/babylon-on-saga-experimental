@@ -1,6 +1,7 @@
 import { PointerInfo, Vector3 } from "babylonjs";
 import { CSSProperties } from "react";
 import CursorManager from "../babylon/cursorManagers/CursorManager";
+import { InfiniteGrid } from "../babylon/gridManagers";
 
 export enum ElementId {
   RenderCanvas = "render-canvas",
@@ -97,3 +98,7 @@ export interface Tree {
 }
 
 export type MeshCursors = Record<MeshCursor, CursorManager>;
+
+export interface EssentialMeshes {
+  grid: InfiniteGrid;
+}
