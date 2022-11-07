@@ -1,16 +1,19 @@
 import SceneManager from "../babylon/sceneManager";
 import { NormalTracerManager } from "../babylon/cursorManagers";
-import { MeshCursor, NormalTracerProperties } from "../types";
+import { MeshCursor, MeshCursors, NormalTracerProperties } from "../types";
 import { RootState, setNormalTracerProperties } from "../reducer";
 import { all, put, select, takeEvery } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { updateNormalTracerState } from "../reducer/cursorReducer";
 
-export default function* cursorSaga(sceneManager: SceneManager) {
-  const normalTracerManager = new NormalTracerManager(
-    MeshCursor.NormalTracer,
-    sceneManager.renderScene
-  );
+export default function* cursorSaga(
+  sceneManager: SceneManager,
+  cursors: MeshCursors
+) {
+  const normalTracerManager = cursors[
+    MeshCursor.NormalTracer
+  ] as NormalTracerManager;
+
   sceneManager.loadCursorCallbacks(normalTracerManager.getCursorCallbacks);
   const normalTracerProperties: NormalTracerProperties = yield select(
     (state: RootState) => state.cursor.properties[MeshCursor.NormalTracer]

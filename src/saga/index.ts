@@ -1,18 +1,18 @@
 import { all } from "redux-saga/effects";
 import cursorSaga from "./cursorSaga";
-import fileSaga from "./fileSaga";
+import sceneSaga from "./sceneSaga";
 import { ElementId } from "../types";
 import SceneManager from "../babylon/sceneManager";
 import { loadShaders } from "../utils";
 
 export default function* saga() {
   yield loadShaders();
-
   const sceneManager = new SceneManager();
-
   yield setCanvasToContainer(sceneManager);
-
-  yield all([cursorSaga(sceneManager), fileSaga(sceneManager)]);
+  yield all([
+    sceneSaga(sceneManager),
+    cursorSaga(sceneManager, sceneManager.meshCursors),
+  ]);
 }
 
 function setCanvasToContainer(sceneManager: SceneManager): Promise<void> {
