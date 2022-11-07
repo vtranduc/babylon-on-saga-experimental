@@ -4,23 +4,29 @@ import cursorReducer, {
   setCursor,
   setNormalTracerProperties,
 } from "./cursorReducer";
-import sceneReducer, { SceneState } from "./sceneReducer";
-import fileReducer, {
-  FileState,
+import sceneReducer, {
+  SceneState,
+  setPreset,
+  clearAllMeshes,
   loadAllFiles,
   clearAllFiles,
-} from "./fileReducer";
+} from "./sceneReducer";
 
 export default combineReducers({
   cursor: cursorReducer,
   scene: sceneReducer,
-  file: fileReducer,
 });
 
 export interface RootState {
   cursor: CursorState;
   scene: SceneState;
-  file: FileState;
 }
 
-export { setCursor, setNormalTracerProperties, loadAllFiles, clearAllFiles };
+export {
+  setCursor,
+  setNormalTracerProperties,
+  setPreset,
+  clearAllMeshes,
+  loadAllFiles,
+  clearAllFiles,
+};

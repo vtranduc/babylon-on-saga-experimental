@@ -15,4 +15,8 @@ export default abstract class CursorManager {
   public abstract get getCursorCallbacks(): (
     setCursorStyle: SetCursorStyle
   ) => Partial<CursorCallbacks>;
+
+  public get uniqueId() {
+    return this.mesh.uniqueId;
+  }
 }

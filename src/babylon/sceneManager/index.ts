@@ -6,19 +6,15 @@ import {
   Vector3,
   PointerInfo,
   PointerEventTypes,
-  MeshBuilder,
-  SceneLoader,
-  FilesInputStore,
 } from "babylonjs";
 import {
-  Asset3DEXT,
   CssCursorStyle,
   CursorCallbacks,
-  EXT,
+  ScenePreset,
   SetCursorStyle,
+  UniqueId,
 } from "../../types";
-import { getEXT, getPathAndName } from "../../utils";
-import { InfiniteGrid } from "../gridManagers";
+import { MeshManager } from "../meshManager";
 
 export default class SceneManager {
   private canvas = document.createElement("canvas");
@@ -35,49 +31,28 @@ export default class SceneManager {
   private resizeObserver = new ResizeObserver(() => this.engine.resize());
   private container: HTMLElement | null = null;
   private cursorCallbacks: CursorCallbacks = this.defaultCursorCallbacks;
+  private meshManager: MeshManager;
 
   constructor() {
     this.canvas.style.width = this.canvas.style.height = "100%";
     this.camera.attachControl();
     this.engine.runRenderLoop(() => this.scene.render());
     new DirectionalLight("light", new Vector3(0, -1, 0), this.scene);
-    new InfiniteGrid("infiniteGrid", this.scene, this.camera.position);
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
-
-    // this.addCat();
-    this.addSomeMeshes();
+    this.meshManager = new MeshManager(this.scene, this.camera.position);
   }
 
-  // Adding temporary objects in the scene for test purposes
-
-  private addSomeMeshes() {
-    const capsule = MeshBuilder.CreateCapsule("");
-    capsule.enablePointerMoveEvents = true;
-    capsule.position.set(1, 1, 1);
-
-    const box = MeshBuilder.CreateBox("");
-    box.enablePointerMoveEvents = true;
-    box.position.set(-1, 1, 1);
-
-    const sphere = MeshBuilder.CreateSphere("");
-    sphere.enablePointerMoveEvents = true;
-    sphere.position.set(-1, 1, -1);
-
-    const a = MeshBuilder.CreateIcoSphere("");
-    a.enablePointerMoveEvents = true;
-    a.position.set(1, 1, -1);
+  public setPreset(preset: ScenePreset) {
+    return this.meshManager.setPreset(preset);
   }
 
-  private addCat() {
-    SceneLoader.ImportMesh(
-      "",
-      "./models/cat-girl-ffxiv/",
-      "scene.gltf",
-      this.scene,
-      (meshes) =>
-        meshes.forEach((mesh, i) => (mesh.enablePointerMoveEvents = true))
-    );
+  public clearAllMeshes() {
+    this.meshManager.clearAll();
+  }
+
+  public get tree() {
+    return this.meshManager.tree;
   }
 
   // Getters and Setters
@@ -87,6 +62,12 @@ export default class SceneManager {
   }
 
   // Public methods
+
+  // Set up
+
+  public categorizeMeshAsEssential(id: UniqueId) {
+    this.meshManager.categorizeMeshAsEssential(id);
+  }
 
   // Canvas handlers
 
@@ -123,27 +104,8 @@ export default class SceneManager {
 
   // Load all files in the store
 
-  public async loadAllFiles() {
-    const pathNameCombined = Object.keys(FilesInputStore.FilesToLoad);
-    for (let i = pathNameCombined.length - 1; i >= 0; i--) {
-      const fullPath = pathNameCombined[i];
-      const ext = getEXT(fullPath);
-      if (!ext || !([Asset3DEXT.GLB, Asset3DEXT.GLTF] as EXT[]).includes(ext))
-        continue;
-      const { path, name } = getPathAndName(fullPath);
-      try {
-        await SceneLoader.ImportMeshAsync(
-          "",
-          `file:${path}`,
-          name,
-          this.scene,
-          null,
-          ext
-        );
-      } catch {
-        throw new Error("Encountered error in loading " + fullPath);
-      }
-    }
+  public loadAllFiles() {
+    return this.meshManager.loadAllFiles();
   }
 
   // Utils

@@ -1,19 +1,25 @@
-import { Scene, Vector3, MeshBuilder } from "babylonjs";
+import { Scene, Vector3, MeshBuilder, GroundMesh } from "babylonjs";
 import { InfiniteGridMaterialManager } from "../../lib";
 
 export class InfiniteGrid {
+  private mesh: GroundMesh;
+
   constructor(name: string, scene: Scene, cameraPosition: Vector3) {
-    const mesh = MeshBuilder.CreateGround(
+    this.mesh = MeshBuilder.CreateGround(
       "ground",
       { width: 2, height: 2 },
       scene
     );
-    mesh.alwaysSelectAsActiveMesh = true;
+    this.mesh.alwaysSelectAsActiveMesh = true;
     const material = new InfiniteGridMaterialManager(
       `${name}Material`,
       scene,
       cameraPosition
     );
-    material.apply(mesh);
+    material.apply(this.mesh);
+  }
+
+  public get uniqueId() {
+    return this.mesh.uniqueId;
   }
 }
