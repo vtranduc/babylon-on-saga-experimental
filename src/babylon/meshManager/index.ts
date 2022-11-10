@@ -8,6 +8,7 @@ import {
   UniqueId,
   XYZ,
 } from "../../types";
+import { createVertexNormals } from "../utils";
 import { MeshCreator } from "./MeshCreator";
 
 export class MeshManager {
@@ -137,6 +138,8 @@ export class MeshManager {
     });
 
     [capsule, box, sphere, icoSphere].forEach((mesh) => {
+      createVertexNormals(mesh, this.scene);
+
       this.add(mesh);
       this.enablePointer(mesh.uniqueId);
     });
