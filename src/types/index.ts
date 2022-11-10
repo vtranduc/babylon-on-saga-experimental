@@ -1,5 +1,7 @@
 import { PointerInfo, Vector3 } from "babylonjs";
 import { CSSProperties } from "react";
+import CursorManager from "../babylon/cursorManagers/CursorManager";
+import { InfiniteGrid } from "../babylon/gridManagers";
 
 export enum ElementId {
   RenderCanvas = "render-canvas",
@@ -71,3 +73,32 @@ export enum CompressedDirectoryEXT {
 }
 
 export type EXT = ImageEXT | Asset3DEXT | CompressedDirectoryEXT;
+
+export enum ScenePreset {
+  PrimitiveObjects = "PrimitiveObjects",
+  Miqote = "Miqote",
+}
+
+export enum Primitive {
+  Box = "Box",
+  Sphere = "Sphere",
+  Capsule = "Capsule",
+  IcoSphere = "IcoSphere",
+}
+
+export type UniqueId = number;
+
+export type XYZ = [number, number, number];
+
+export interface Tree {
+  id: UniqueId;
+  name: string;
+  position: XYZ;
+  children: Tree[];
+}
+
+export type MeshCursors = Record<MeshCursor, CursorManager>;
+
+export interface EssentialMeshes {
+  grid: InfiniteGrid;
+}
