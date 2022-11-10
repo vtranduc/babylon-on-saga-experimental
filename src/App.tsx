@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { clearAllMeshes, setPreset } from "./reducer";
 import { CSSProperties } from "react";
 
+// import * as AdobeViewer from "@dimension/adobe-3d-viewer";
+
 const buttonStyle: CSSProperties = { margin: "10px 10px" };
 
 function App() {

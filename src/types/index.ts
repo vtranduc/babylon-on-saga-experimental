@@ -1,4 +1,4 @@
-import { PointerInfo, Vector3 } from "babylonjs";
+import { Animation, Material, PointerInfo, Vector3 } from "babylonjs";
 import { CSSProperties } from "react";
 import CursorManager from "../babylon/cursorManagers/CursorManager";
 import { InfiniteGrid } from "../babylon/gridManagers";
@@ -101,4 +101,31 @@ export type MeshCursors = Record<MeshCursor, CursorManager>;
 
 export interface EssentialMeshes {
   grid: InfiniteGrid;
+}
+
+export interface Animations {
+  [animationId: UniqueId]: Animation;
+}
+
+export interface Materials {
+  [materialId: UniqueId]: Material;
+}
+
+// export interface BasicMeshState {
+//   position: XYZ;
+// }
+
+// export
+
+export interface MesheState {
+  [meshId: UniqueId]: {
+    position: XYZ;
+    animations: UniqueId[];
+    materials: UniqueId[];
+  };
+}
+
+export enum MeshType {
+  AbstractMesh = "AbstractMesh",
+  Mesh = "Mesh",
 }

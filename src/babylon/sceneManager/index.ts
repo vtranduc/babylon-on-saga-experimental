@@ -6,6 +6,8 @@ import {
   Vector3,
   PointerInfo,
   PointerEventTypes,
+  HemisphericLight,
+  SpotLight,
 } from "babylonjs";
 import {
   CssCursorStyle,
@@ -36,7 +38,26 @@ export default class SceneManager {
     this.canvas.style.width = this.canvas.style.height = "100%";
     this.camera.attachControl();
     this.engine.runRenderLoop(() => this.scene.render());
-    new DirectionalLight("light", new Vector3(0, -1, 0), this.scene);
+    // new DirectionalLight(
+    //   "light",
+    //   new Vector3(0, -1, -1).normalize(),
+    //   this.scene
+    // );
+
+    var light = new HemisphericLight(
+      "HemiLight",
+      new Vector3(0, 1, 0),
+      this.scene
+    );
+    // new SpotLight(
+    //   "",
+    //   new Vector3(0, 1, 0),
+    //   new Vector3(0, -1, 0),
+    //   0,
+    //   0,
+    //   this.scene
+    // );
+
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
     this.meshManager = new MeshManager(this.scene, this.camera.position);
