@@ -6,6 +6,9 @@ import {
   FilesInputStore,
   ISceneLoaderAsyncResult,
   Vector3,
+  Color3,
+  Nullable,
+  LinesMesh,
 } from "babylonjs";
 import {
   Asset3DEXT,
@@ -108,12 +111,24 @@ export class MeshCreator {
     options: MeshCreationOptions
   ) {
     const firstGeneration = this.filterFirstGeneration(result.meshes);
+
+    console.log("SHOW ALL RESULT!: ");
+
+    // console.log(result.)
+
+    console.log("show for each mesh ----> ", result.animationGroups);
+    result.meshes.forEach((mesh) => {
+      console.log("scaling: ", mesh.scaling);
+    });
+
     firstGeneration.forEach((mesh) => this.processMesh(mesh, options));
     return firstGeneration;
   }
 
   private processMesh(mesh: AbstractMesh, options: MeshCreationOptions) {
     if (options.position) mesh.position.fromArray(options.position);
+    console.log("show scaling here ---> ", mesh.scaling.z);
+    mesh.scaling.z = 1;
     this.removeMesh(mesh);
   }
 
@@ -122,6 +137,40 @@ export class MeshCreator {
   }
 
   private removeMesh(mesh: AbstractMesh) {
-    this.scene.removeMesh(mesh, true);
+    // this.scene.removeMesh(mesh, true);
+  }
+
+  public createFaceNormals(
+    mesh: AbstractMesh,
+    traverse = false,
+    size = 0.1,
+    color = "#ff00ff"
+  ): LinesMesh[] {
+    // console.log("creating lines: ", mesh.getface);
+
+    const descendantNormals = traverse
+      ? mesh
+          .getChildMeshes(false)
+          .reduce(
+            (acc, descendant) =>
+              this.createFaceNormals(descendant, false, size, color).concat(
+                acc
+              ),
+            [] as LinesMesh[]
+          )
+      : [];
+    mesh.updateFacetData();
+    const positions = mesh.getFacetLocalPositions();
+    if (!positions.length) return descendantNormals;
+    const normals = mesh.getFacetLocalNormals();
+    const lines: Vector3[][] = [];
+    for (let i = 0; i < positions.length; i++) {
+      const center = positions[i].add(mesh.position);
+      const normal = normals[i].scale(size).add(center);
+      lines.push([center, normal]);
+    }
+    const normalLines = MeshBuilder.CreateLineSystem("", { lines }, this.scene);
+    normalLines.color.copyFrom(Color3.FromHexString(color));
+    return descendantNormals.concat(normalLines);
   }
 }

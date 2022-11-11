@@ -1,4 +1,4 @@
-import { Scene, Vector3, AbstractMesh } from "babylonjs";
+import { Scene, Vector3, AbstractMesh, Node } from "babylonjs";
 import {
   EssentialMeshes,
   MeshCursors,
@@ -8,6 +8,7 @@ import {
   UniqueId,
   XYZ,
 } from "../../types";
+import { getMeshTree, hasShape } from "../utils";
 import { MeshCreator } from "./MeshCreator";
 
 export class MeshManager {
@@ -35,7 +36,7 @@ export class MeshManager {
   public remove(id: UniqueId) {
     const mesh = this.scene.getMeshByUniqueId(id);
     if (!mesh) return;
-    this.scene.removeMesh(mesh, true);
+    // this.scene.removeMesh(mesh, true);
     mesh.dispose(true, true);
   }
 
@@ -46,10 +47,70 @@ export class MeshManager {
   public enablePointer(id: UniqueId) {
     const mesh = this.scene.getMeshByUniqueId(id);
     if (!mesh) return;
-    mesh.enablePointerMoveEvents = true;
-    mesh
-      .getChildMeshes()
-      .forEach((child) => (child.enablePointerMoveEvents = true));
+
+    console.log("show MESH TREE: ", getMeshTree(mesh));
+
+    console.log("direct: ", mesh.getChildMeshes(true));
+    console.log(
+      "indirect: ",
+      mesh
+        .getChildMeshes(false)
+        .map((abc) => [
+          abc.parent?.uniqueId,
+          abc.parent?.parent?.uniqueId,
+          abc.parent?.parent?.uniqueId,
+          abc.parent?.parent?.parent?.uniqueId,
+          abc.parent?.parent?.parent?.parent?.uniqueId,
+          abc.parent?.parent?.parent?.parent?.parent?.uniqueId,
+        ])
+    );
+
+    const abcsfd: Node[] = mesh.getChildren();
+
+    console.log(
+      "GET 16 : ",
+      this.scene.getMeshByUniqueId(16),
+      this.scene.getTransformNodeByUniqueId(16)
+    );
+
+    if (5 === 5) return;
+
+    console.log("enabling the pointer: ", mesh.getClassName(), hasShape(mesh));
+
+    const children = mesh.getChildMeshes(true);
+
+    if (hasShape(mesh)) mesh.enablePointerMoveEvents = true;
+    mesh.getChildMeshes(false).forEach((child) => {
+      hasShape(child) && (child.enablePointerMoveEvents = true);
+      console.log("child has it? ", hasShape(child));
+
+      console.log("show the scale: ----> ", child.scaling);
+
+      child.parent = null;
+    });
+
+    setTimeout(() => {
+      console.log("show the mesh after some secs: ", mesh.scaling);
+
+      children.forEach((child, i) => {
+        console.log("child stuffs: ", child.scaling);
+
+        if (i < 500) child.parent = mesh;
+
+        if (i < 1000) child.isVisible = false;
+
+        console.log("show the scaling of this: ", mesh);
+      });
+    }, 2000);
+
+    setTimeout(() => {
+      console.log("set the scaling for ", mesh.scaling);
+      // mesh.scaling = new Vector3(-1, 1, -1);
+
+      mesh.scaling.set(1, 1, -1);
+
+      // mesh.isVisible = false;
+    }, 3000);
   }
 
   public setPosition(id: UniqueId, position: XYZ) {
@@ -81,6 +142,8 @@ export class MeshManager {
       (mesh) => !mesh.parent && this.isInteractive(mesh)
     );
   }
+
+  // THIS IS WRONG
 
   private getTree(mesh: AbstractMesh): Tree {
     return {
@@ -116,7 +179,21 @@ export class MeshManager {
       "./models/cat-girl-ffxiv/",
       "scene.gltf"
     );
-    meshes.forEach((mesh) => {
+
+    // this.scene.useRightHandedSystem = true;
+
+    meshes.forEach((mesh, i) => {
+      console.log("generating normals here ", i, ": ", mesh.scaling);
+
+      this.meshCreator.createFaceNormals(mesh, true);
+
+      // if (//)
+
+      if (i === 0) {
+        console.log("show the children: ", mesh.getChildMeshes());
+        console.log("show submeshes", mesh.subMeshes);
+      }
+
       this.add(mesh);
       this.enablePointer(mesh.uniqueId);
     });
