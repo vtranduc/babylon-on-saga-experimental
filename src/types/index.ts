@@ -93,7 +93,8 @@ export type XYZ = [number, number, number];
 export interface Tree {
   id: UniqueId;
   name: string;
-  position: XYZ;
+  // position: XYZ;
+  // scaling: XYZ;
   children: Tree[];
 }
 
@@ -101,4 +102,8 @@ export type MeshCursors = Record<MeshCursor, CursorManager>;
 
 export interface EssentialMeshes {
   grid: InfiniteGrid;
+}
+
+export interface MeshCreationOptions {
+  position?: XYZ;
 }

@@ -13,51 +13,74 @@ import {
   ScenePreset,
   SetCursorStyle,
 } from "../../types";
-import { MeshManager } from "../meshManager";
+import { AssetLoader } from "../assetLoader";
+import { MeshHelper, MeshManager } from "../meshManager";
+import { NodeManager } from "../nodeManager.ts";
+import { SceneHelper } from "../SceneHelper";
 
 export default class SceneManager {
   private canvas = document.createElement("canvas");
   private engine = new Engine(this.canvas, true);
-  private scene = new Scene(this.engine);
-  private camera = new ArcRotateCamera(
-    "Camera",
-    -Math.PI / 2,
-    Math.PI / 4,
-    20,
-    Vector3.Zero(),
-    this.scene
-  );
+  private scene = this.createScene(this.engine);
+  // private camera = new ArcRotateCamera(
+  //   "Camera",
+  //   -Math.PI / 2,
+  //   Math.PI / 4,
+  //   20,
+  //   Vector3.Zero(),
+  //   this.scene
+  // );
   private resizeObserver = new ResizeObserver(() => this.engine.resize());
   private container: HTMLElement | null = null;
   private cursorCallbacks: CursorCallbacks = this.defaultCursorCallbacks;
-  private meshManager: MeshManager;
+  // private meshManager: MeshManager;
+
+  private nodeManager: NodeManager;
 
   constructor() {
     this.canvas.style.width = this.canvas.style.height = "100%";
-    this.camera.attachControl();
+    // this.camera.attachControl();
     this.engine.runRenderLoop(() => this.scene.render());
-    new DirectionalLight("light", new Vector3(0, -1, 0), this.scene);
+    // const light = new DirectionalLight(
+    //   "light",
+    //   new Vector3(0, -1, 0),
+    //   this.scene
+    // );
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
-    this.meshManager = new MeshManager(this.scene, this.camera.position);
+    // this.meshManager = new MeshManager(this.scene, this.camera.position);
+
+    this.nodeManager = new NodeManager(this.scene);
+  }
+
+  private createScene(engine: Engine) {
+    const scene = new Scene(engine);
+    MeshHelper.scene = scene;
+    AssetLoader.scene = scene;
+    // SceneHelper.scene = scene;
+    return scene;
   }
 
   public setPreset(preset: ScenePreset) {
-    return this.meshManager.setPreset(preset);
+    return this.nodeManager.setPreset(preset);
   }
 
   public clearAllMeshes() {
-    this.meshManager.clearAll();
+    // this.meshManager.clearAll();
+
+    this.nodeManager.clearAllTransformNodesAndMeshes();
   }
 
   public get tree() {
-    return this.meshManager.tree;
+    // return this.meshManager.tree;
+
+    return this.nodeManager.tree;
   }
 
   // Getters and Setters
 
   public get meshCursors() {
-    return this.meshManager.meshCursors;
+    return this.nodeManager.meshCursors;
   }
 
   // Public methods
@@ -98,7 +121,7 @@ export default class SceneManager {
   // Load all files in the store
 
   public loadAllFiles() {
-    return this.meshManager.loadAllFiles();
+    return this.nodeManager.loadAllFiles();
   }
 
   // Utils
@@ -140,18 +163,21 @@ export default class SceneManager {
   }
 
   private onPointerUp(pointerInfo: PointerInfo) {
-    this.cursorCallbacks.dragEnd(pointerInfo, this.camera.position);
+    this.cursorCallbacks.dragEnd(pointerInfo, this.nodeManager.cameraPosition);
   }
 
   private onPointerDown(pointerInfo: PointerInfo) {
-    this.cursorCallbacks.dragStart(pointerInfo, this.camera.position);
+    this.cursorCallbacks.dragStart(
+      pointerInfo,
+      this.nodeManager.cameraPosition
+    );
   }
 
   private onPointerWheel(pointerInfo: PointerInfo) {
-    this.cursorCallbacks.wheel(pointerInfo, this.camera.position);
+    this.cursorCallbacks.wheel(pointerInfo, this.nodeManager.cameraPosition);
   }
 
   private onPointerMove(pointerInfo: PointerInfo) {
-    this.cursorCallbacks.move(pointerInfo, this.camera.position);
+    this.cursorCallbacks.move(pointerInfo, this.nodeManager.cameraPosition);
   }
 }
