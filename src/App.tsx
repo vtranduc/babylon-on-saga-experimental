@@ -1,14 +1,22 @@
 import { ElementId, ScenePreset } from "./types";
 import { DragAndDrop } from "./view";
 import "babylonjs-loaders";
-import { useDispatch } from "react-redux";
-import { clearAllMeshes, setPreset } from "./reducer";
-import { CSSProperties } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { clearAllMeshes, RootState, setPreset } from "./reducer";
+import { CSSProperties, useEffect } from "react";
+
+// import * as AdobeViewer from "@dimension/adobe-3d-viewer";
 
 const buttonStyle: CSSProperties = { margin: "10px 10px" };
 
 function App() {
   const dispatch = useDispatch();
+
+  const tree = useSelector((state: RootState) => state.scene.tree);
+
+  useEffect(() => {
+    console.log("new tree here: ", tree);
+  }, [tree]);
 
   return (
     <>
