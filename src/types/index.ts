@@ -93,7 +93,7 @@ export type XYZ = [number, number, number];
 export interface Tree {
   id: UniqueId;
   name: string;
-  position: XYZ;
+  // position: XYZ;
   children: Tree[];
 }
 

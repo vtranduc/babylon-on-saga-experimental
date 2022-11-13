@@ -86,7 +86,7 @@ export class MeshManager {
     return {
       id: mesh.uniqueId,
       name: mesh.name,
-      position: mesh.position.asArray() as XYZ,
+      // position: mesh.position.asArray() as XYZ,
       children: mesh.getChildMeshes().map((child) => this.getTree(child)),
     };
   }
