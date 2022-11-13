@@ -8,6 +8,8 @@ import { loadShaders } from "../utils";
 export default function* saga() {
   yield loadShaders();
   const sceneManager = new SceneManager();
+  yield sceneManager.loadLibrary();
+  sceneManager.keepAllAssets();
   yield setCanvasToContainer(sceneManager);
   yield all([
     sceneSaga(sceneManager),
