@@ -25,6 +25,7 @@ export interface CursorCallbacks {
   wheel: PointerCallback;
   dragStart: PointerCallback;
   dragEnd: PointerCallback;
+  out: () => void;
 }
 
 // The values of these enums must match the actual CSS cursor style
@@ -93,7 +94,6 @@ export type XYZ = [number, number, number];
 export interface Tree {
   id: UniqueId;
   name: string;
-  position: XYZ;
   children: Tree[];
 }
 
@@ -101,4 +101,34 @@ export type MeshCursors = Record<MeshCursor, CursorManager>;
 
 export interface EssentialMeshes {
   grid: InfiniteGrid;
+}
+
+export enum Asset {
+  AnimationGroup = "AnimationGroup",
+  Animation = "Animation",
+  Camera = "Camera",
+  EffectLayer = "EffectLayer",
+  Geometry = "Geometry",
+  Layer = "Layer",
+  LensFlareSystem = "LensFlareSystem",
+  Light = "Light",
+  Material = "Material",
+  Mesh = "Mesh",
+  MorphTargetManager = "MorphTargetManager",
+  MultiMaterial = "MultiMaterial",
+  ParticleSystem = "ParticleSystem",
+  PostProcess = "PostProcess",
+  PrePassRenderer = "PrePassRenderer",
+  ProceduralTexture = "ProceduralTexture",
+  ReflectionProbe = "ReflectionProbe",
+  RootNode = "RootNode",
+  Skeleton = "Skeleton",
+  Sound = "Sound",
+  SubSurfaceConfiguration = "SubSurfaceConfiguration",
+  Texture = "Texture",
+  TransformNode = "TransformNode",
+}
+
+export enum LibraryModel {
+  Miqote = "Miqote",
 }

@@ -4,11 +4,14 @@ import "babylonjs-loaders";
 import { useDispatch } from "react-redux";
 import { clearAllMeshes, setPreset } from "./reducer";
 import { CSSProperties } from "react";
+import { useTreeLogger } from "./customHooks";
 
 const buttonStyle: CSSProperties = { margin: "10px 10px" };
 
 function App() {
   const dispatch = useDispatch();
+
+  useTreeLogger();
 
   return (
     <>
