@@ -25,6 +25,7 @@ export interface CursorCallbacks {
   wheel: PointerCallback;
   dragStart: PointerCallback;
   dragEnd: PointerCallback;
+  out: () => void;
 }
 
 // The values of these enums must match the actual CSS cursor style

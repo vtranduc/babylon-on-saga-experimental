@@ -74,6 +74,8 @@ export class NormalTracerManager extends CursorManager {
     this.mesh = mesh;
     this.sphereMaterialManager = sphereMaterialManager;
     this.discMaterialManager = discMaterialManager;
+
+    this.mesh.isVisible = false;
   }
 
   // Mesh Creation
@@ -151,7 +153,6 @@ export class NormalTracerManager extends CursorManager {
 
   public get getCursorCallbacks() {
     return (setCursorStyle: SetCursorStyle) => {
-      this.handleNoHit(setCursorStyle);
       return {
         move: this.getOnCursorUpdateCallback(setCursorStyle),
         wheel: this.getOnCursorUpdateCallback(setCursorStyle),
@@ -166,6 +167,7 @@ export class NormalTracerManager extends CursorManager {
             cameraPosition
           );
         },
+        out: () => this.handleNoHit(setCursorStyle),
       };
     };
   }
@@ -223,6 +225,7 @@ export class NormalTracerManager extends CursorManager {
   ): Nullable<{ point: Vector3; normal: Vector3 }> {
     const pickInfo = pointerInfo.pickInfo;
     if (!pickInfo?.hit) return null;
+    if (!pickInfo.pickedMesh?.enablePointerMoveEvents) return null;
     if (!pickInfo.pickedPoint) return null;
     const normal = pickInfo.getNormal(true);
     if (!normal) return null;

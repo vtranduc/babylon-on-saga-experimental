@@ -22,6 +22,7 @@ export default class SceneManager {
     this.onPointerObservable = this.onPointerObservable.bind(this);
     this.scene.onPointerObservable.add(this.onPointerObservable);
     this.assetManager = new SceneAssetManager(this.scene);
+    this.addCanvasListeners();
   }
 
   public loadLibrary() {
@@ -95,6 +96,11 @@ export default class SceneManager {
 
   // Pointer utils
 
+  private addCanvasListeners() {
+    this.onPointerOut = this.onPointerOut.bind(this);
+    this.canvas.addEventListener("mouseleave", this.onPointerOut);
+  }
+
   private get setCursorStyle(): SetCursorStyle {
     return (style: CssCursorStyle) => {
       if (!this.container || this.container.style.cursor === style) return;
@@ -108,6 +114,7 @@ export default class SceneManager {
       wheel: () => {},
       dragStart: () => {},
       dragEnd: () => {},
+      out: () => {},
     };
   }
 
@@ -146,5 +153,9 @@ export default class SceneManager {
 
   private onPointerMove(pointerInfo: PointerInfo) {
     this.cursorCallbacks.move(pointerInfo, this.assetManager.cameraPosition);
+  }
+
+  private onPointerOut() {
+    this.cursorCallbacks.out();
   }
 }
