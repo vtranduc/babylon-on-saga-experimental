@@ -1,4 +1,13 @@
-import { Engine, Scene, PointerInfo, PointerEventTypes } from "babylonjs";
+import {
+  Engine,
+  Scene,
+  PointerInfo,
+  PointerEventTypes,
+  MeshBuilder,
+  Vector2,
+  Vector3,
+} from "babylonjs";
+import { SolidFresnelMaterialManager } from "../../lib";
 import {
   CssCursorStyle,
   CursorCallbacks,
@@ -23,6 +32,56 @@ export default class SceneManager {
     this.scene.onPointerObservable.add(this.onPointerObservable);
     this.assetManager = new SceneAssetManager(this.scene);
     this.addCanvasListeners();
+
+    // ---------------------------------------------
+
+    // const sphere = MeshBuilder.CreateSphere("", { diameter: 2 });
+
+    const mat = new SolidFresnelMaterialManager("", this.scene, {
+      cameraPosition: this.assetManager.cameraPosition,
+    });
+
+    // mat.apply(sphere);
+
+    const size = 2;
+
+    const disc = MeshBuilder.CreatePlane(
+      "",
+      { width: size, height: size },
+      this.scene
+    );
+
+    // disc.rotate(new Vector3(1, 0, 0), Math.PI / 2);
+
+    // disc.rotate(new Vector3(0, 1, 0), -Math.PI / 2);
+
+    disc.bakeCurrentTransformIntoVertices();
+
+    mat.apply(disc);
+
+    disc.alwaysSelectAsActiveMesh = true;
+
+    // disc.renderingGroupId = 1;
+
+    const disc2 = MeshBuilder.CreatePlane(
+      "",
+      { width: size, height: size },
+      this.scene
+    );
+    const mat2 = new SolidFresnelMaterialManager("", this.scene, {
+      cameraPosition: this.assetManager.cameraPosition,
+      innerColor: "#ff00ff",
+    });
+
+    disc.position.set(-5, 0, 0);
+
+    mat2.apply(disc2);
+
+    disc2.position.set(5, 0.0, 0);
+
+    disc2.alwaysSelectAsActiveMesh = true;
+
+    // this.scene.removeMesh(disc2);
   }
 
   public loadLibrary() {

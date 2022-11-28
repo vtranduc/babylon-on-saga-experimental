@@ -16,7 +16,9 @@ function App() {
   return (
     <>
       <DragAndDrop
-        style={{ border: "solid 5px red", width: "80vw", height: "80vh" }}
+        // style={{ border: "solid 5px red", width: "80vw", height: "80vh" }}
+
+        style={{ border: "solid 5px red", width: "800px", height: "500px" }}
         id={ElementId.RenderCanvas}
       />
 
