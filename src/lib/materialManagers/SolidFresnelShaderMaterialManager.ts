@@ -1,4 +1,4 @@
-import { Color3, Scene, ShaderMaterial } from "babylonjs";
+import { Color3, Scene, ShaderMaterial, Vector3 } from "babylonjs";
 import { Shader } from "../../types";
 import MaterialManager from "./MaterialManager";
 
@@ -6,6 +6,7 @@ interface SolidFresnelMaterialManagerOptions {
   maxRimProjection?: number;
   innerColor?: string;
   outerColor?: string;
+  cameraPosition?: Vector3;
 }
 
 export class SolidFresnelMaterialManager extends MaterialManager<ShaderMaterial> {
@@ -20,6 +21,7 @@ export class SolidFresnelMaterialManager extends MaterialManager<ShaderMaterial>
       maxRimProjection = 0.6,
       innerColor = "#eeeeee",
       outerColor = "#7f7f7f",
+      cameraPosition = new Vector3(),
     }: SolidFresnelMaterialManagerOptions = {}
   ) {
     const material = new ShaderMaterial(
@@ -44,6 +46,9 @@ export class SolidFresnelMaterialManager extends MaterialManager<ShaderMaterial>
     material.setFloat("uMaxRimProjection", this.maxRimProjection);
     material.setColor3("uInnerColor", this.innerColor3);
     material.setColor3("uOuterColor", this.outerColor3);
+    material.setVector3("uCameraPosition", cameraPosition);
+
+    // material.backFaceCulling = false;
   }
 
   // Getters and Setters
